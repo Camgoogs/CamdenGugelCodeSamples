@@ -1,0 +1,78 @@
+# Camden Gugel - CSCE 230 Lab 1 - DeMorgan's Laws
+# Tests whether a student is eligible or not based on given parameters.
+
+# Get valid GPA input
+while True:
+    try:
+        gpa = float(input("Enter the student's GPA (0.0 - 4.0): "))
+        if 0.0 <= gpa <= 4.0:
+            break
+        else:
+            print("Invalid GPA. Please enter a value between 0.0 and 4.0.")
+    except ValueError:
+        print("Invalid input. Please enter a numerical value for GPA.")
+
+# Get valid credit hours input
+while True:
+    try:
+        credit_hours = int(input("Enter the number of credit hours completed: "))
+        if credit_hours >= 0:
+            break
+        else:
+            print("Invalid credit hours. Please enter a non-negative integer.")
+    except ValueError:
+        print("Invalid input. Please enter an integer value for credit hours.")
+
+# Get valid student status input
+valid_statuses = {'undergraduate', 'graduate', 'neither'}
+while True:
+    student_status = input("Enter the student status ('undergraduate', 'graduate', or 'neither'): ").lower()
+    if student_status in valid_statuses:
+        break
+    else:
+        print("Invalid status. Please enter 'undergraduate', 'graduate', or 'neither'.")
+
+# Get valid academic probation input
+while True:
+    on_academic_probation_input = input("Has the student been on academic probation in the past semester? (Enter True/False): ").capitalize()
+    if on_academic_probation_input in {'True', 'False'}:
+        on_academic_probation = on_academic_probation_input == 'True'
+        break
+    else:
+        print("Invalid input. Please enter 'True' or 'False'.")
+
+# Get valid scholarship application submission input
+while True:
+    submitted_application_input = input("Has the student submitted the scholarship application before the deadline? (Enter True/False): ").capitalize()
+    if submitted_application_input in {'True', 'False'}:
+        submitted_application = submitted_application_input == 'True'
+        break
+    else:
+        print("Invalid input. Please enter 'True' or 'False'.")
+
+#Check if student is eligible
+is_eligible = (
+    gpa >= 3.5 and
+    credit_hours >= 30 and
+    (student_status == 'undergraduate' or student_status == 'graduate') and
+    on_academic_probation == False and
+    submitted_application
+)
+
+#Check if student is not eligible
+not_eligible = (
+    gpa < 3.5 or
+    credit_hours < 30 or
+    (student_status != 'undergraduate' and student_status != 'graduate') or
+    on_academic_probation or
+    submitted_application == False
+)
+
+#Print if the student is eligible or not, and if neither, print that there was problem with input.
+print()
+if is_eligible:
+    print(f"The student is eligible.")
+elif not_eligible:
+    print(f"The student is NOT eligible.")
+else:
+    print(f"Error. Please try again.")
