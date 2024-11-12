@@ -1,0 +1,37 @@
+# Camden Gugel - CSCE 230 Lab 3 - Co-primes
+# Create and test function to see if all numbers in a list are co-primes.
+
+#Function to return the gcd of two numbers
+def gcd(a: int, b: int) -> int:
+    a = abs(a)  #Set variables to absolute value in case they are negative
+    b = abs(b)
+    while a != 0 and b != 0:    #Euclidean algorithm: do mod of the larger side until one side is zero
+        if a > b:
+            a = a % b
+        else:
+            b = b % a
+    if a == 0:      #Return the number that is not equal to zero
+        return b
+    else:
+        return a
+
+#Function to check if all ints in a list are co-primes and returns True if they are and False otherwise.
+def all_pairs_are_coprime(numbers: list[int]) -> bool:
+    for i in range(len(numbers)):
+        for j in range(i+1, len(numbers)):
+            if gcd(numbers[i], numbers[j]) != 1:
+                return False
+    return True
+
+#Main function to check the co-prime function
+def main():
+    print(all_pairs_are_coprime([2, 3, 5]))     #True: Base true test
+    print(all_pairs_are_coprime([2, 4, 5]))     #False: Base false test
+    print(all_pairs_are_coprime([1, 1, 1]))     #True: Test for if numbers are 1
+    print(all_pairs_are_coprime([0, 3, 7]))     #False: Test for if zero is included
+    print(all_pairs_are_coprime([13]))          #True: Test for if only one number is provided
+    print(all_pairs_are_coprime([-2, 4, 5]))    #False: False test for a negative number
+    print(all_pairs_are_coprime([-2, 3, 5]))    #True: Positive test for a negative number
+
+if __name__ == "__main__":
+    main()
