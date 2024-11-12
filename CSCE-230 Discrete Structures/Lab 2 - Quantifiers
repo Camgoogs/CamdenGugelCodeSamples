@@ -1,0 +1,35 @@
+# Camden Gugel - CSCE 230 Lab 2 - Quantifiers
+# Create function to check if numbers in a list are prime using universal and existential quantifiers. 
+
+# Function to check if a number is prime
+def is_prime(n: int) -> bool:
+    if n <= 1:  # Always return False if num is 1 or less
+        return False
+    for i in range(2, n):   # Cycle through nums 2 to the input to find any factors besides 1 and itself
+        if n % i == 0 and i != n:
+            return False
+    return True
+
+# Universal Quantifier
+def is_prime_for_all(nums: list[int]) -> bool:
+    for i in nums:
+        if not is_prime(i): # Iterate through list and check if any num is not prime, returns False if one is found
+            return False
+    return True
+
+# Existential Quantifier
+def exists_even(nums: list[int]) -> bool:
+    for i in nums:
+        if i % 2 == 0:  # Iterate through list and check if a num is even. If one is found, break by returning True
+            return True
+    return False
+
+# Testing functions
+if __name__ == "__main__":
+    # Test cases for universal quantifier
+    print(is_prime_for_all([2, 3, 5, 7, 11]))  # Expected output = True
+    print(is_prime_for_all([1, 2, 3, 4, 5]))   # Expected output = False
+
+    # Test cases for existential quantifier
+    print(exists_even([1, 3, 5, 7, 9]))        # Expected output = False
+    print(exists_even([1, 2, 3, 4, 5]))        # Expected output = True
