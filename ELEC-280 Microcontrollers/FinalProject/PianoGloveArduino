@@ -1,0 +1,120 @@
+#include "pitches.h" // Include pitches.h header file
+
+const int photoResistor1Pin = A0; // Photoresistor connected to analog pin A0
+const int photoResistor2Pin = A1; // Photoresistor connected to analog pin A1
+const int photoResistor3Pin = A2; // Photoresistor connected to analog pin A2
+const int photoResistor4Pin = A3; // Photoresistor connected to analog pin A3
+
+const int buzzerPin = 9;          // Buzzer connected to digital pin 9
+
+const int buttonPin = 8;      // the pin that the pushbutton is attached to
+int buttonState = LOW;        // variable for reading the pushbutton status
+int lastButtonState = LOW;    // variable to store the previous state of the button
+unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
+unsigned long debounceDelay = 50;    // the debounce time; increase if the output flickers
+int melodyMode = 0;               // Variable to store the melody mode (0 - Default, 1 - Custom)
+
+void setup() {
+  pinMode(buttonPin, INPUT);     // initialize the pushbutton pin as an input
+  Serial.begin(9600);            // initialize serial communication at 9600 bits per second
+}
+
+void loop() {
+  int photoResistor1Value = analogRead(photoResistor1Pin); // Read the value from photoresistor 1
+  int photoResistor2Value = analogRead(photoResistor2Pin); // Read the value from photoresistor 2
+  int photoResistor3Value = analogRead(photoResistor3Pin); // Read the value from photoresistor 3
+  int photoResistor4Value = analogRead(photoResistor4Pin); // Read the value from photoresistor 4
+
+  int reading = digitalRead(buttonPin);  // read the state of the button
+  // check if the button state has changed
+  if (reading != lastButtonState) {
+    // reset the debounce timer
+    lastDebounceTime = millis();
+  }
+  // check if the debounce delay has passed
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    // only toggle the button state if it's different from the previous state
+    if (reading != buttonState) {
+      buttonState = reading;
+      // if the button is pressed
+      if (buttonState == HIGH) {
+        Serial.println("Button pressed!");  // print a message indicating the button is pressed
+        melodyMode = !melodyMode;
+      }
+    }
+  }
+  // update the last button state
+  lastButtonState = reading;
+
+
+  // Check the current melody mode
+  if (melodyMode == 0) {
+    // Default melody mode
+    playDefaultMelody(photoResistor1Value, photoResistor2Value, photoResistor3Value, photoResistor4Value);
+  } else {
+    // Custom melody mode
+    playCustomMelody(photoResistor1Value, photoResistor2Value, photoResistor3Value, photoResistor4Value);
+  }
+
+  // Print the values to the serial monitor
+  /*Serial.print("Photoresistor 1: ");
+  Serial.println(photoResistor1Value);
+  Serial.print("Photoresistor 2: ");
+  Serial.println(photoResistor2Value);
+  Serial.print("Photoresistor 3: ");
+  Serial.println(photoResistor3Value);
+  Serial.print("Photoresistor 4: ");
+  Serial.println(photoResistor4Value);
+  Serial.println("---------------------");
+  delay(1000); */
+}
+
+// Function to play melody using default notes
+void playDefaultMelody(int photoResistor1Value, int photoResistor2Value, int photoResistor3Value, int photoResistor4Value) {
+  // Check if any of the photoresistor values are below 5
+  if (photoResistor1Value < 300) {
+    // Play note C
+    tone(buzzerPin, NOTE_C4); // Play note C4
+    delay(50); // Play for 500 milliseconds
+  } else if (photoResistor2Value < 200) {
+    // Play note D
+    tone(buzzerPin, NOTE_D4); // Play note D4
+    delay(50); // Play for 500 milliseconds
+  } else if (photoResistor3Value < 200) {
+    // Play note E
+    tone(buzzerPin, NOTE_E4); // Play note E4
+    delay(50); // Play for 500 milliseconds
+  } else if (photoResistor4Value < 200) {
+    // Play note F
+    tone(buzzerPin, NOTE_F4); // Play note F4
+    delay(50); // Play for 500 milliseconds
+  } else {
+    // Stop the tone if no photoresistor values are below 3
+    noTone(buzzerPin);
+  }
+}
+
+// Function to play melody using custom notes
+void playCustomMelody(int photoResistor1Value, int photoResistor2Value, int photoResistor3Value, int photoResistor4Value) {
+  // Check if any of the photoresistor values are below 3
+  if (photoResistor1Value < 300) {
+    // Play note G
+    tone(buzzerPin, NOTE_G4); // Play note G4
+    delay(50); // Play for 500 milliseconds
+  } else if (photoResistor2Value < 200) {
+    // Play note A
+    tone(buzzerPin, NOTE_A4); // Play note A4
+    delay(50); // Play for 500 milliseconds
+  } else if (photoResistor3Value < 200) {
+    // Play note B
+    tone(buzzerPin, NOTE_B4); // Play note B4
+    delay(50); // Play for 500 milliseconds
+  } else if (photoResistor4Value < 200) {
+    // Play note C
+    tone(buzzerPin, NOTE_C5); // Play note C5
+    delay(50); // Play for 500 milliseconds
+  } else {
+    // Stop the tone if no photoresistor values are below 3
+    noTone(buzzerPin);
+  }
+}
